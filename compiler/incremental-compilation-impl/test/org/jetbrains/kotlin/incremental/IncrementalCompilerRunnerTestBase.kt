@@ -58,9 +58,9 @@ abstract class IncrementalCompilerRunnerTestBase<Args : CommonCompilerArguments>
         val buildLogFile = buildLogFinder.findBuildLog(testDir) ?: throw IllegalStateException("build log file not found in $workingDir")
         val buildLogSteps = parseTestBuildLog(buildLogFile)
         val modifications = getModificationsToPerform(testDir,
-                                                                                                    moduleNames = null,
-                                                                                                    allowNoFilesWithSuffixInTestData = false,
-                                                                                                    touchPolicy = TouchPolicy.CHECKSUM)
+                                                      moduleNames = null,
+                                                      allowNoFilesWithSuffixInTestData = false,
+                                                      touchPolicy = TouchPolicy.CHECKSUM)
 
         assert(modifications.size == buildLogSteps.size) {
             "Modifications count (${modifications.size}) != expected build log steps count (${buildLogSteps.size})"
