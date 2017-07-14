@@ -131,3 +131,9 @@ inline fun <T> measureTimeMillisWithResult(block: () -> T) : Pair<Long, T> {
     val result = block()
     return Pair(System.currentTimeMillis() - start, result)
 }
+
+inline fun <T: Any> checkBoth(a: T?, b: T?, check: (a: T, b: T) -> Boolean): Boolean= when {
+    a == null && b == null -> true
+    a != null && b != null -> check(a, b)
+    else -> false
+}

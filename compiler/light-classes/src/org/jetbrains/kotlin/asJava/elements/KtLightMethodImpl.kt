@@ -34,6 +34,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.jvm.KotlinJavaPsiFacade
+import org.jetbrains.kotlin.utils.addToStdlib.checkBoth
 
 class KtLightMethodImpl private constructor(
         computeRealDelegate: () -> PsiMethod,
@@ -140,8 +141,14 @@ class KtLightMethodImpl private constructor(
     }
 
     override fun isEquivalentTo(another: PsiElement?): Boolean {
-        if (another is KtLightMethod && this == another) {
-            return true
+        if (another is KtLightMethodImpl) {
+            if (name == another.name &&
+                containingClass == another.containingClass &&
+                checkBoth(lightMemberOrigin, another.lightMemberOrigin, LightMemberOrigin::isEquivalentTo) &&
+                _memberIndex == another._memberIndex) {
+
+                return true
+            }
         }
 
         return super.isEquivalentTo(another)
@@ -150,10 +157,11 @@ class KtLightMethodImpl private constructor(
     private val _memberIndex: MemberIndex?
         get() = (dummyDelegate ?: clsDelegate).memberIndex
 
-    /* comparing origin and member index should be enough to determine equality:
-            for compiled elements origin contains delegate
-            for source elements index is unique to each member
-            */
+    /*
+    comparing origin and member index should be enough to determine equality:
+        - for compiled elements origin contains delegate
+        - for source elements index is unique to each member
+    */
     override fun equals(other: Any?): Boolean =
             other is KtLightMethodImpl &&
             this.name == other.name &&
@@ -188,11 +196,8 @@ class KtLightMethodImpl private constructor(
             return origin
         }
 
-        fun create(
-                delegate: PsiMethod, origin: LightMemberOrigin?, containingClass: KtLightClass
-        ): KtLightMethodImpl {
-            return KtLightMethodImpl({ delegate}, origin, containingClass)
-        }
+        fun create(delegate: PsiMethod, origin: LightMemberOrigin?, containingClass: KtLightClass) =
+                KtLightMethodImpl({ delegate }, origin, containingClass)
 
         fun lazy(
                 dummyDelegate: PsiMethod?,
