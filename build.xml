@@ -500,6 +500,8 @@
             <available property="jssejar" value="${java.home}/lib/jsse.jar" file="${java.home}/lib/jsse.jar"/>
             <available property="jssejar" value="${java.home}/../Classes/jsse.jar" file="${java.home}/../Classes/jsse.jar"/>
 
+            <available property="kotlinx-coroutines-corejar" value="${dependencies}/kotlinx-coroutines-core.jar" file="${dependencies}/kotlinx-coroutines-core.jar"/>
+
             <proguard configuration="@{configuration}"/>
         </sequential>
     </macrodef>

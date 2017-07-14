@@ -58,6 +58,7 @@ messages/**)
 -libraryjars '<bootstrap.reflect>'
 -libraryjars '<bootstrap.script.runtime>'
 -libraryjars '<tools.jar>'
+-libraryjars '<kotlinx-coroutines-corejar>'
 
 -dontoptimize
 -dontobfuscate
