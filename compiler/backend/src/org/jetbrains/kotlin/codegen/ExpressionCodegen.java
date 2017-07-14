@@ -2906,11 +2906,12 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
         }
 
         if (BoxedToPrimitiveEquality.isApplicable(opToken, leftType, rightType)) {
-            return BoxedToPrimitiveEquality.create(opToken, genLazy(left, leftType), leftType, genLazy(right, rightType), rightType);
+            return BoxedToPrimitiveEquality.create(opToken, genLazy(left, leftType), leftType, genLazy(right, rightType), rightType,
+                                                   myFrameMap);
         }
 
         if (PrimitiveToBoxedEquality.isApplicable(opToken, leftType, rightType)) {
-            return BoxedToPrimitiveEquality.create(opToken, genLazy(left, leftType), leftType, genLazy(right, rightType), rightType);
+            return PrimitiveToBoxedEquality.create(opToken, genLazy(left, leftType), leftType, genLazy(right, rightType), rightType);
         }
 
 
